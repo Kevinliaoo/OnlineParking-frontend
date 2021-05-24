@@ -1,0 +1,29 @@
+#menu {
+    height: 50px; 
+    width: 400px;
+    margin: 10px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    box-shadow: 1px 1px 10px #888888;
+    z-index: 1;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.menu__search input {
+    margin-left: 10px;
+    text-indent: 10px;
+    width: 300px;
+    outline: none;
+    border: none;
+}
+
+.fa-search {
+    margin-left: 20px;
+}
+
+.fa-bars:hover {
+    cursor: pointer;
+}

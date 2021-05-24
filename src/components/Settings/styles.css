@@ -1,0 +1,46 @@
+#settings {
+    height: 100vh;
+    z-index: 2;
+    position: fixed;
+    background-color:rgba(0,0,0,0.3);
+}
+
+#settings__menu {
+    height: 100vh;
+    min-width: 300px;
+    background-color: white;
+    padding: 0;
+    display: flex; 
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#settings__header {
+    margin: 0px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+
+#settings__title {
+    color: black;
+    margin-top: 10px;
+}
+
+#settings__user {
+    display: flex;
+    padding: 30px 10px;
+    align-items: stretch;  
+    width: 100%;
+}
+
+#settings__user:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#settings__user > p {
+    padding-left: 40px;
+}

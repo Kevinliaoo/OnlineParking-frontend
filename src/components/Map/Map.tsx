@@ -1,9 +1,11 @@
 import React from 'react'; 
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
+import config from '../../utils/config';
+
 const containerStyles = {
-    width: '400px',
-    height: '400px',
+    width: '100%',
+    height: '100%',
 }
 
 const center = {
@@ -11,10 +13,15 @@ const center = {
     lng: 121.225001,
 }
 
+const defaultOptions = {
+    fullscreenControl: false,
+    streetViewControl: false,   
+}
+
 const Map: React.FC = () => {
-    const { isLoaded } = useJsApiLoader({
+    const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script', 
-        googleMapsApiKey: "",
+        googleMapsApiKey: config.defaults.GOOGLE_MAPS_API_KEY || '',
     })
 
     const [ map, setMap ] = React.useState(null);
@@ -29,18 +36,30 @@ const Map: React.FC = () => {
         setMap(null);
     }, [])
 
-    return isLoaded ? (
-        <GoogleMap
-            mapContainerStyle = { containerStyles }
-            center = { center }
-            zoom = { 10 }
-            onLoad = { onLoad }
-            onUnmount = { onUnmount }
-        >
-        </GoogleMap>
-    ) : (
-        <></>
-    )
+    const renderMap = () => {
+        return (
+            <GoogleMap
+                mapContainerStyle = { containerStyles }
+                center = { center }
+                zoom = { 8 }
+                options = { defaultOptions }
+                onLoad = { onLoad }
+                onUnmount = { onUnmount }
+            >
+
+            </GoogleMap>
+        )
+    }
+
+    if (loadError) {
+        return (
+            <div>
+                Map could not be loaded
+            </div>
+        )
+    }
+
+    return isLoaded ? renderMap() : <div>LoadinfPage</div>
 }
 
 export default Map;
