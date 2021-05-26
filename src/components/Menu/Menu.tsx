@@ -1,19 +1,15 @@
 import React from 'react'; 
 
-import { menuPropsInterface } from '../../interfaces/menuPropsInterface';
+import { IMenuProps } from '../../interfaces/MenuProps';
 
 import './styles.css'
 
-const Menu: React.FC<menuPropsInterface> = props => {
-
-    const toggleSettingsMenu = () => {
-        props.menuOnClick();
-    }
+const Menu: React.FC<IMenuProps> = props => {
 
     return (
         <div id="menu">
             <div id="menu__button">
-                <i className="fas fa-bars fa-lg" onClick={toggleSettingsMenu}></i>
+                <i className="fas fa-bars fa-lg" onClick={() => props.menuOnClick(true)}></i>
             </div>
             <div className="menu__search">
                 <input type="text" placeholder="Search" ></input>

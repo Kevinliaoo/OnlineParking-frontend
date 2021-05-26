@@ -1,0 +1,52 @@
+#addNewModal {
+    z-index: 4;
+    width: 100vw; 
+    height: 100vh; 
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-top: 10vh;
+}
+
+#addNewModal__menu {
+    height: 80vh;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 5px 5px 50px;
+    display: flex; 
+    flex-direction: column;
+}
+
+.closeContainer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
+.titleContainer {
+    display: flex;
+    justify-content: center;
+}
+
+#addNewModal__form {
+    margin-top: 30px;
+    display: flex; 
+    flex-direction: column;
+}
+
+#addNewModal__form > input {
+    text-indent: 20px;
+    margin: 10px 15px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
+}
+
+#addNewModal__form > button {
+    width: 40%;
+    height: 50px;
+    border-radius: 15px;
+    margin: auto;
+    margin-top: 30px;
+    background-color: greenyellow;
+    font-weight: bold;
+}

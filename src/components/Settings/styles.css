@@ -5,6 +5,10 @@
     background-color:rgba(0,0,0,0.3);
 }
 
+#settings__user {
+    margin-top: 30px;
+}
+
 #settings__menu {
     height: 100vh;
     min-width: 300px;
@@ -29,18 +33,22 @@
     margin-top: 10px;
 }
 
-#settings__user {
+.settingsItem {
     display: flex;
     padding: 30px 10px;
     align-items: stretch;  
     width: 100%;
 }
 
-#settings__user:hover {
+.settingsItem:hover {
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#settings__user > p {
+.settingsItem > p {
     padding-left: 40px;
+}
+
+.fa-times:hover {
+    cursor: pointer;
 }
