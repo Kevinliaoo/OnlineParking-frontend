@@ -1,11 +1,88 @@
 import React from 'react'; 
+import axios from 'axios';
 
 import { IModalProps } from '../../interfaces/ModalProps';
 
+import config from '../../utils/config';
+import LSFunctions from '../../utils/localStorage';
+
 import './styles.css';
 
+interface INewParking {
+    city: string; 
+    streetName: string; 
+    number: number; 
+    longitude: number; 
+    latitude: number; 
+}
+
 const AddNewModal: React.FC<IModalProps> = props => {
+    
     const { isActive } = props;
+
+    const [form, setValues] = React.useState<INewParking>({
+        city: '', 
+        streetName: '', 
+        number: 0,
+        longitude: 0,
+        latitude: 0
+    })
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        const numberFields = ['number', 'longitude', 'latitude'];
+
+        if (numberFields.includes(event.target.name)) {
+            event.target.name === numberFields[0] ? (
+                setValues({
+                    ...form, 
+                    [event.target.name]: parseInt(event.target.value),
+                })
+            ) : (
+                setValues({
+                    ...form, 
+                    [event.target.name]: parseFloat(event.target.value),
+                })
+            )
+        } else {
+            setValues({
+                ...form, 
+                [event.target.name]: event.target.value.trim()
+            })
+        }
+    }
+
+    const handleSubmit = (event: React.SyntheticEvent): void => {
+        event.preventDefault();
+        const path: string = '/parkings/new'; 
+        const endpoint: string = `${config.API.URL}${path}`;
+
+        const bodyParameters = {
+            "city": form.city,
+            "address": {
+                "streetName": form.streetName,
+                "number": form.number,
+            },
+            "location": {
+                "longitude": form.longitude,
+                "latitude": form.latitude,
+            }
+        }
+
+        axios.post(
+            endpoint, 
+            bodyParameters, 
+            {
+                headers: { Authorization:`Bearer ${LSFunctions.getJwtToken()}` }
+            }
+        )
+            .then(response => {
+                props.onClose(false)
+            })
+            .catch(e => {
+                alert('Internal server error'); 
+                props.onClose(false);
+            })
+    }
 
     const renderModal = () => (
         <div id="addNewModal" className="container-fluid">
@@ -17,13 +94,39 @@ const AddNewModal: React.FC<IModalProps> = props => {
                     <div className="titleContainer">
                         <h2>Add new Parking:</h2>
                     </div>
-                    <div id="addNewModal__form">
-                        <input placeholder="Street name: " />
-                        <input placeholder="Street number: " type="number" />
-                        <input placeholder="Longitude: " type="number" />
-                        <input placeholder="Latitude: " type="number" />
-                        <button type="button" >Create</button>
-                    </div>
+                    <form id="addNewModal__form" onSubmit={handleSubmit}>
+                        <input 
+                            placeholder="City: " 
+                            name="city"
+                            onChange={handleChange}
+                        />
+                        <input 
+                            placeholder="Street name: " 
+                            name="streetName"
+                            onChange={handleChange}
+                        />
+                        <input 
+                            placeholder="Street number: " 
+                            type="number" 
+                            name="number"
+                            onChange={handleChange}
+                        />
+                        <input 
+                            placeholder="Longitude: " 
+                            type="number" 
+                            step="any"
+                            name="longitude"
+                            onChange={handleChange}
+                        />
+                        <input 
+                            placeholder="Latitude: " 
+                            type="number" 
+                            step="any"
+                            name="latitude"
+                            onChange={handleChange}
+                        />
+                        <button type="submit" >Create</button>
+                    </form>
                 </div>
             </div>
         </div>

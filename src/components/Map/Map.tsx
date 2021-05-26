@@ -9,9 +9,9 @@ const containerStyles = {
 }
 
 const center = {
-    lat: 24.953560, 
-    lng: 121.225001,
-}
+    lat: -3.745,
+    lng: -38.523
+};
 
 const defaultOptions = {
     fullscreenControl: false,
