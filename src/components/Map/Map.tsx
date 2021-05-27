@@ -1,6 +1,8 @@
 import React from 'react'; 
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
+import Marker from '../Marker/Marker';
+
 import config from '../../utils/config';
 
 const containerStyles = {
@@ -40,13 +42,17 @@ const Map: React.FC = () => {
         return (
             <GoogleMap
                 mapContainerStyle = { containerStyles }
-                center = { center }
+                center = {{ lat: 24.989170, lng: 121.317402 }}
                 zoom = { 8 }
                 options = { defaultOptions }
                 onLoad = { onLoad }
                 onUnmount = { onUnmount }
             >
-
+                {/* <Marker 
+                    _id={"elfm"}
+                    lat={24.989170}
+                    lng={121.317402}
+                /> */}
             </GoogleMap>
         )
     }

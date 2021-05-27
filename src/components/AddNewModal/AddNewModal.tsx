@@ -75,7 +75,7 @@ const AddNewModal: React.FC<IModalProps> = props => {
                 headers: { Authorization:`Bearer ${LSFunctions.getJwtToken()}` }
             }
         )
-            .then(response => {
+            .then(() => {
                 props.onClose(false)
             })
             .catch(e => {
