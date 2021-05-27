@@ -53,6 +53,14 @@ const AddNewModal: React.FC<IModalProps> = props => {
 
     const handleSubmit = (event: React.SyntheticEvent): void => {
         event.preventDefault();
+
+        const submitFormInputs = document.querySelectorAll('.addNewModal__inputField');
+        const inputValues = Array.from(submitFormInputs).map((i: any) => i.value);
+        if (inputValues.includes('')) {
+            alert('Missing values');
+            return;
+        }
+        
         const path: string = '/parkings/new'; 
         const endpoint: string = `${config.API.URL}${path}`;
 
@@ -63,8 +71,8 @@ const AddNewModal: React.FC<IModalProps> = props => {
                 "number": form.number,
             },
             "location": {
-                "longitude": form.longitude,
-                "latitude": form.latitude,
+                "lng": form.longitude,
+                "lat": form.latitude,
             }
         }
 
@@ -99,24 +107,20 @@ const AddNewModal: React.FC<IModalProps> = props => {
                             placeholder="City: " 
                             name="city"
                             onChange={handleChange}
+                            className="addNewModal__inputField"
                         />
                         <input 
                             placeholder="Street name: " 
                             name="streetName"
                             onChange={handleChange}
+                            className="addNewModal__inputField"
                         />
                         <input 
                             placeholder="Street number: " 
                             type="number" 
                             name="number"
                             onChange={handleChange}
-                        />
-                        <input 
-                            placeholder="Longitude: " 
-                            type="number" 
-                            step="any"
-                            name="longitude"
-                            onChange={handleChange}
+                            className="addNewModal__inputField"
                         />
                         <input 
                             placeholder="Latitude: " 
@@ -124,6 +128,15 @@ const AddNewModal: React.FC<IModalProps> = props => {
                             step="any"
                             name="latitude"
                             onChange={handleChange}
+                            className="addNewModal__inputField"
+                        />
+                        <input 
+                            placeholder="Longitude: " 
+                            type="number" 
+                            step="any"
+                            name="longitude"
+                            onChange={handleChange}
+                            className="addNewModal__inputField"
                         />
                         <button type="submit" >Create</button>
                     </form>

@@ -1,71 +1,80 @@
 import React from 'react'; 
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-import Marker from '../Marker/Marker';
-
+import IParkings from '../../interfaces/IParkings';
 import config from '../../utils/config';
 
 const containerStyles = {
-    width: '100%',
     height: '100%',
+    width: '100%'
 }
-
-const center = {
-    lat: -3.745,
-    lng: -38.523
-};
 
 const defaultOptions = {
     fullscreenControl: false,
     streetViewControl: false,   
 }
 
-const Map: React.FC = () => {
-    const { isLoaded, loadError } = useJsApiLoader({
-        id: 'google-map-script', 
-        googleMapsApiKey: config.defaults.GOOGLE_MAPS_API_KEY || '',
+interface ILocation {
+    lat: number; 
+    lng: number; 
+}
+
+interface IMapProps {
+    parkings: IParkings[];
+}
+
+const Map: React.FC<IMapProps> = props => {
+
+    const parkings: IParkings[] = props.parkings;
+
+    const [currentLocation, setLocation] = React.useState<ILocation>({
+        lat: 0,
+        lng: 0
     })
 
-    const [ map, setMap ] = React.useState(null);
+    const [locationLoaded, loadLocation] = React.useState<boolean>(false);
 
-    const onLoad = React.useCallback(map => {
-        const bounds = new window.google.maps.LatLngBounds(); 
-        map.fitBounds(bounds);
-        setMap(map);
-    }, [])
+    React.useEffect(() => {
+        navigator.geolocation.getCurrentPosition(locationSuccess);
+    }, []);
 
-    const onUnmount = React.useCallback(map => {
-        setMap(null);
-    }, [])
+    const locationSuccess = (position: GeolocationPosition) => {
+        setLocation({
+            lat: position.coords.latitude, 
+            lng: position.coords.longitude,
+        })
+        loadLocation(true);
+    }
+
 
     const renderMap = () => {
         return (
-            <GoogleMap
-                mapContainerStyle = { containerStyles }
-                center = {{ lat: 24.989170, lng: 121.317402 }}
-                zoom = { 8 }
-                options = { defaultOptions }
-                onLoad = { onLoad }
-                onUnmount = { onUnmount }
+            <LoadScript
+                googleMapsApiKey={config.defaults.GOOGLE_MAPS_API_KEY as string} 
             >
-                {/* <Marker 
-                    _id={"elfm"}
-                    lat={24.989170}
-                    lng={121.317402}
-                /> */}
-            </GoogleMap>
+                <GoogleMap
+                    mapContainerStyle={containerStyles}
+                    zoom={15}
+                    center={currentLocation}
+                    options={defaultOptions}
+                >
+                    {
+                        parkings.map(item => {
+                            return (
+                                <Marker key={item._id} position={item.location} />
+                            )
+                        })
+                    }
+                </GoogleMap>
+            </LoadScript>
         )
     }
 
-    if (loadError) {
-        return (
-            <div>
-                Map could not be loaded
-            </div>
-        )
-    }
+    const renderLoading = () => (
+        <div>Loading map</div>
+    )
 
-    return isLoaded ? renderMap() : <div>LoadinfPage</div>
+    return locationLoaded ? renderMap() : renderLoading()
 }
 
 export default Map;
