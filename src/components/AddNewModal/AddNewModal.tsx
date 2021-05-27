@@ -1,10 +1,9 @@
 import React from 'react'; 
 import axios from 'axios';
 
-import { IModalProps } from '../../interfaces/ModalProps';
-
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
+import ILocation from '../../interfaces/ILocation';
 
 import './styles.css';
 
@@ -16,9 +15,16 @@ interface INewParking {
     latitude: number; 
 }
 
+export interface IModalProps {
+    isActive: boolean;
+    onClose: () => void;
+    defaultLatLng: ILocation; 
+}
+
 const AddNewModal: React.FC<IModalProps> = props => {
     
     const { isActive } = props;
+    const isDefaultLocation = props.defaultLatLng.lat !== -1 && props.defaultLatLng.lng !== -1;
 
     const [form, setValues] = React.useState<INewParking>({
         city: '', 
@@ -84,11 +90,11 @@ const AddNewModal: React.FC<IModalProps> = props => {
             }
         )
             .then(() => {
-                props.onClose(false)
+                props.onClose();
             })
             .catch(e => {
                 alert('Internal server error'); 
-                props.onClose(false);
+                props.onClose();
             })
     }
 
@@ -97,7 +103,7 @@ const AddNewModal: React.FC<IModalProps> = props => {
             <div className="row">
                 <div className="col-10 offset-1 col-md-6 offset-md-3" id="addNewModal__menu">
                     <div className="closeContainer">
-                        <i className="fas fa-times fa-2x" onClick={() => props.onClose(false)}></i>
+                        <i className="fas fa-times fa-2x" onClick={props.onClose}></i>
                     </div>
                     <div className="titleContainer">
                         <h2>Add new Parking:</h2>
@@ -129,6 +135,7 @@ const AddNewModal: React.FC<IModalProps> = props => {
                             name="latitude"
                             onChange={handleChange}
                             className="addNewModal__inputField"
+                            value={isDefaultLocation ? props.defaultLatLng.lat : ''}
                         />
                         <input 
                             placeholder="Longitude: " 
@@ -137,6 +144,7 @@ const AddNewModal: React.FC<IModalProps> = props => {
                             name="longitude"
                             onChange={handleChange}
                             className="addNewModal__inputField"
+                            value={isDefaultLocation ? props.defaultLatLng.lng : ''}
                         />
                         <button type="submit" >Create</button>
                     </form>

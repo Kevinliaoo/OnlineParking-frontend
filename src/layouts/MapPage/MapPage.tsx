@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import IRoute from '../../interfaces/RouteInterface';
 import IParkings from '../../interfaces/IParkings';
+import ILocation from '../../interfaces/ILocation';
 
 import Map from '../../components/Map/Map';
 import Menu from '../../components/Menu/Menu';
@@ -19,14 +20,29 @@ const MapPage: React.FC<IRoute> = props => {
     const [ modalVisible, setModalVisibility ] = React.useState<boolean>(false);
     const [ profileVisible, setProfileVisibility ] = React.useState<boolean>(false);
     const [ parkingsLoaded, loadParkings ] = React.useState<boolean>(false);
-
     const [ parkings, setParkigs ] = React.useState<IParkings[]>([]);
+    const [ clickedLocation, setLocation ] = React.useState<ILocation>({
+        lat: -1, lng: -1
+    })
 
     const handleLogout = () => {
         const { history } = props as any;
         history.push('/login')
     }
 
+    const handleOnClickMap = (latLng: ILocation) => {
+        setLocation(latLng);
+        setModalVisibility(true);
+    }
+
+    const closeAddNewModal = () => {
+        setLocation({
+            lat: -1, 
+            lng: -1
+        });
+        setModalVisibility(false);
+    }
+    
     React.useEffect(() => {
         const parkings_url: string = `${config.API.URL}/parkings?city=Taoyuan&available=false`;
 
@@ -46,7 +62,11 @@ const MapPage: React.FC<IRoute> = props => {
     const renderPage = () => (
         <div id="mapPage">
             <Menu menuOnClick={setSettingsVisibility} /> 
-            <AddNewModal isActive={modalVisible} onClose={setModalVisibility} />
+            <AddNewModal 
+                isActive={modalVisible} 
+                onClose={closeAddNewModal} 
+                defaultLatLng={clickedLocation}
+            />
             <ProfileModal 
                 isActive={profileVisible} 
                 onClose={setProfileVisibility} 
@@ -59,7 +79,7 @@ const MapPage: React.FC<IRoute> = props => {
                 openProfile={setProfileVisibility}
                 handleLogout={handleLogout}
             />
-            <Map parkings={parkings} /> 
+            <Map parkings={parkings} handleOnClickMap={handleOnClickMap} /> 
         </div>
     )
 

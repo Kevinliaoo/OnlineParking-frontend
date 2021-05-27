@@ -2,6 +2,7 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 import IParkings from '../../interfaces/IParkings';
+import ILocation from '../../interfaces/ILocation';
 import config from '../../utils/config';
 
 const containerStyles = {
@@ -14,13 +15,9 @@ const defaultOptions = {
     streetViewControl: false,   
 }
 
-interface ILocation {
-    lat: number; 
-    lng: number; 
-}
-
 interface IMapProps {
     parkings: IParkings[];
+    handleOnClickMap: (params: ILocation) => void;
 }
 
 const Map: React.FC<IMapProps> = props => {
@@ -28,8 +25,8 @@ const Map: React.FC<IMapProps> = props => {
     const parkings: IParkings[] = props.parkings;
 
     const [currentLocation, setLocation] = React.useState<ILocation>({
-        lat: 0,
-        lng: 0
+        lat: -1,
+        lng: -1
     })
 
     const [locationLoaded, loadLocation] = React.useState<boolean>(false);
@@ -46,6 +43,13 @@ const Map: React.FC<IMapProps> = props => {
         loadLocation(true);
     }
 
+    const handleMapClick = (event: google.maps.MapMouseEvent) => {
+        const clickedLocation: ILocation = {
+            lat: event.latLng.lat(), 
+            lng: event.latLng.lng(),
+        }
+        props.handleOnClickMap(clickedLocation);
+    }
 
     const renderMap = () => {
         return (
@@ -57,6 +61,7 @@ const Map: React.FC<IMapProps> = props => {
                     zoom={15}
                     center={currentLocation}
                     options={defaultOptions}
+                    onClick={handleMapClick}
                 >
                     {
                         parkings.map(item => {
