@@ -4,6 +4,7 @@ import axios from 'axios';
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
 import ILocation from '../../interfaces/ILocation';
+import { IModalProps } from '../../interfaces/ModalProps';
 
 import './styles.css';
 
@@ -11,17 +12,18 @@ interface INewParking {
     city: string; 
     streetName: string; 
     number: number; 
+    // Default values -1
     longitude: number; 
     latitude: number; 
 }
 
-export interface IModalProps {
-    isActive: boolean;
+interface IAddNewProps extends IModalProps {
+    isActive: boolean; 
     onClose: () => void;
     defaultLatLng: ILocation; 
 }
 
-const AddNewModal: React.FC<IModalProps> = props => {
+const AddNewModal: React.FC<IAddNewProps> = props => {
     
     const { isActive } = props;
     const isDefaultLocation = props.defaultLatLng.lat !== -1 && props.defaultLatLng.lng !== -1;
@@ -77,8 +79,8 @@ const AddNewModal: React.FC<IModalProps> = props => {
                 "number": form.number,
             },
             "location": {
-                "lng": form.longitude,
-                "lat": form.latitude,
+                "lng": isDefaultLocation ? props.defaultLatLng.lng : form.longitude,
+                "lat": isDefaultLocation ? props.defaultLatLng.lat : form.latitude,
             }
         }
 

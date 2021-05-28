@@ -6,6 +6,10 @@ const config = {
     }, 
     API: {
         URL: process.env.REACT_APP_API_URL
+    }, 
+    maps: {
+        parkingOccupied: 'https://img.icons8.com/pastel-glyph/64/fa314a/parking--v3.png', 
+        parkingAvailable: 'https://img.icons8.com/pastel-glyph/64/26e07f/parking--v3.png'
     }
 }
 

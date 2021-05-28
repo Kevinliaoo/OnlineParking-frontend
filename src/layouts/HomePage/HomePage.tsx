@@ -1,11 +1,17 @@
 import React from 'react'; 
 
+import ModalBase from '../../components/ModalBase/ModalBase';
+
 import IRoute from '../../interfaces/RouteInterface';
 
 const HomePage: React.FC<IRoute> = props => {
 
     return (
-        <div>Online parking Home page</div>
+        <ModalBase>
+            <div>
+                Esto es el child
+            </div>
+        </ModalBase>
     )
 }
 

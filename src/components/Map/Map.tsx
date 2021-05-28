@@ -1,5 +1,6 @@
 import React from 'react'; 
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import axios from 'axios';
 
 import IParkings from '../../interfaces/IParkings';
 import ILocation from '../../interfaces/ILocation';
@@ -18,6 +19,7 @@ const defaultOptions = {
 interface IMapProps {
     parkings: IParkings[];
     handleOnClickMap: (params: ILocation) => void;
+    loadParkingData: (data: IParkings) => void;
 }
 
 const Map: React.FC<IMapProps> = props => {
@@ -51,6 +53,17 @@ const Map: React.FC<IMapProps> = props => {
         props.handleOnClickMap(clickedLocation);
     }
 
+    const parkingClicked = async (event: google.maps.MapMouseEvent, _id: string) => {
+        const endpoint = `${config.API.URL}/parkings/${_id}`;
+
+        try {
+            const response: IParkings = (await axios.get(endpoint)).data; 
+            props.loadParkingData(response);
+        } catch(e) {
+            alert('Internal server error');
+        }
+    }
+
     const renderMap = () => {
         return (
             <LoadScript
@@ -58,7 +71,7 @@ const Map: React.FC<IMapProps> = props => {
             >
                 <GoogleMap
                     mapContainerStyle={containerStyles}
-                    zoom={15}
+                    zoom={17}
                     center={currentLocation}
                     options={defaultOptions}
                     onClick={handleMapClick}
@@ -66,7 +79,14 @@ const Map: React.FC<IMapProps> = props => {
                     {
                         parkings.map(item => {
                             return (
-                                <Marker key={item._id} position={item.location} />
+                                <Marker 
+                                    key={item._id} 
+                                    position={item.location} 
+                                    onClick={(e) => parkingClicked(e, item._id)}
+                                    icon={{
+                                        url: item.available ? config.maps.parkingAvailable : config.maps.parkingOccupied
+                                    }}
+                                />
                             )
                         })
                     }

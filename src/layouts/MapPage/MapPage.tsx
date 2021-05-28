@@ -10,37 +10,82 @@ import Menu from '../../components/Menu/Menu';
 import Settings from '../../components/Settings/Settings';
 import AddNewModal from '../../components/AddNewModal/AddNewModal';
 import ProfileModal from '../../components/ProfileModal/ProfileModal';
+import ParkingModal from '../../components/ParkingModal/ParkingModal';
 import config from '../../utils/config';
 
 import './styles.css';
 
 const MapPage: React.FC<IRoute> = props => {
 
+    // Settings menu visibility
     const [ settingsVisible, setSettingsVisibility ] = React.useState<boolean>(false);
+    // Add new Parking Modal visibility
     const [ modalVisible, setModalVisibility ] = React.useState<boolean>(false);
+    // Profile info modal visibility
     const [ profileVisible, setProfileVisibility ] = React.useState<boolean>(false);
+    // Parking info modal visibility
+    const [ parkingVisible, setParkingVisibility ] = React.useState<boolean>(false);
+    // Whether the API request to get Parkings was done
     const [ parkingsLoaded, loadParkings ] = React.useState<boolean>(false);
+    // Parkings got by API request
     const [ parkings, setParkigs ] = React.useState<IParkings[]>([]);
+    // Location clicked on map to add a new Parking
     const [ clickedLocation, setLocation ] = React.useState<ILocation>({
         lat: -1, lng: -1
     })
+    // Parking info for Parking info modal
+    const [ parkingInfo, setParkingInfo ] = React.useState<IParkings>({
+        // Empty id value for default 
+        _id: '',
+        location: {
+            lat: -1, 
+            lng: -1
+        },
+        available: false, 
+        address: {
+            streetName: '',
+            number: -1
+        }, 
+        last_updated: '', 
+        counts: -1,
+        user: '',
+        city: ''
+    })
 
+    // Logout function
     const handleLogout = () => {
         const { history } = props as any;
         history.push('/login')
     }
 
+    // When user clicks the map to add a new Parking
     const handleOnClickMap = (latLng: ILocation) => {
         setLocation(latLng);
         setModalVisibility(true);
     }
 
+    // User closes Modal to add new Parking
     const closeAddNewModal = () => {
         setLocation({
             lat: -1, 
             lng: -1
         });
         setModalVisibility(false);
+    }
+
+    // User clicks a Parking to show Parking info modal 
+    const loadParkingData = (parking: IParkings) => {
+        setParkingInfo(parking)
+        setParkingVisibility(true);
+    }
+
+    // User closes parking modal 
+    const closeParkingModal= (): void => {
+        setParkingInfo({
+            ...parkingInfo, 
+            _id: ''
+        })
+        setParkingVisibility(false);
     }
     
     React.useEffect(() => {
@@ -72,6 +117,11 @@ const MapPage: React.FC<IRoute> = props => {
                 onClose={setProfileVisibility} 
                 goBack={handleLogout}
             />
+            <ParkingModal 
+                isActive={parkingVisible}
+                onClose={closeParkingModal}
+                parkingData={parkingInfo}
+            />
             <Settings 
                 visibility={settingsVisible} 
                 onClose={setSettingsVisibility} 
@@ -79,7 +129,11 @@ const MapPage: React.FC<IRoute> = props => {
                 openProfile={setProfileVisibility}
                 handleLogout={handleLogout}
             />
-            <Map parkings={parkings} handleOnClickMap={handleOnClickMap} /> 
+            <Map 
+                parkings={parkings} 
+                handleOnClickMap={handleOnClickMap} 
+                loadParkingData={loadParkingData}
+            /> 
         </div>
     )
 
