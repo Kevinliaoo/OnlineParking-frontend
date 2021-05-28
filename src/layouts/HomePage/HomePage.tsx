@@ -7,7 +7,11 @@ import IRoute from '../../interfaces/RouteInterface';
 const HomePage: React.FC<IRoute> = props => {
 
     return (
-        <ModalBase>
+        <ModalBase
+            isActive={true}
+            onClose={() => {}}
+            modalTitle="dcskm"
+        >
             <div>
                 Esto es el child
             </div>
