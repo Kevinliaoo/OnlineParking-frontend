@@ -1,13 +1,8 @@
 import React from 'react'; 
 
-import './styles.css';
+import { IModalProps } from '../../interfaces/ModalProps';
 
-interface IModalProps {
-    children: React.ReactNode;
-    onClose: () => void;
-    isActive: boolean;
-    modalTitle: string;
-}
+import './styles.css';
 
 const ModalBase: React.FC<IModalProps> = props => {
     const renderModal = () => (

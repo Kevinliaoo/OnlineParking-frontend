@@ -1,10 +1,11 @@
 import React from 'react'; 
 import axios from 'axios';
 
+import ModalBase from '../ModalBase/ModalBase';
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
 import ILocation from '../../interfaces/ILocation';
-import { IModalProps } from '../../interfaces/ModalProps';
+import { IOtherModals } from '../../interfaces/ModalProps';
 
 import './styles.css';
 
@@ -17,15 +18,12 @@ interface INewParking {
     latitude: number; 
 }
 
-interface IAddNewProps extends IModalProps {
-    isActive: boolean; 
-    onClose: () => void;
+interface IAddNewProps extends IOtherModals {
     defaultLatLng: ILocation; 
 }
 
 const AddNewModal: React.FC<IAddNewProps> = props => {
-    
-    const { isActive } = props;
+
     const isDefaultLocation = props.defaultLatLng.lat !== -1 && props.defaultLatLng.lng !== -1;
 
     const [form, setValues] = React.useState<INewParking>({
@@ -101,61 +99,57 @@ const AddNewModal: React.FC<IAddNewProps> = props => {
     }
 
     const renderModal = () => (
-        <div id="addNewModal" className="container-fluid">
-            <div className="row">
-                <div className="col-10 offset-1 col-md-6 offset-md-3" id="addNewModal__menu">
-                    <div className="closeContainer">
-                        <i className="fas fa-times fa-2x" onClick={props.onClose}></i>
-                    </div>
-                    <div className="titleContainer">
-                        <h2>Add new Parking:</h2>
-                    </div>
-                    <form id="addNewModal__form" onSubmit={handleSubmit}>
-                        <input 
-                            placeholder="City: " 
-                            name="city"
-                            onChange={handleChange}
-                            className="addNewModal__inputField"
-                        />
-                        <input 
-                            placeholder="Street name: " 
-                            name="streetName"
-                            onChange={handleChange}
-                            className="addNewModal__inputField"
-                        />
-                        <input 
-                            placeholder="Street number: " 
-                            type="number" 
-                            name="number"
-                            onChange={handleChange}
-                            className="addNewModal__inputField"
-                        />
-                        <input 
-                            placeholder="Latitude: " 
-                            type="number" 
-                            step="any"
-                            name="latitude"
-                            onChange={handleChange}
-                            className="addNewModal__inputField"
-                            value={isDefaultLocation ? props.defaultLatLng.lat : ''}
-                        />
-                        <input 
-                            placeholder="Longitude: " 
-                            type="number" 
-                            step="any"
-                            name="longitude"
-                            onChange={handleChange}
-                            className="addNewModal__inputField"
-                            value={isDefaultLocation ? props.defaultLatLng.lng : ''}
-                        />
-                        <button type="submit" >Create</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <form id="addNewModal__form" onSubmit={handleSubmit}>
+            <input 
+                placeholder="City: " 
+                name="city"
+                onChange={handleChange}
+                className="addNewModal__inputField"
+            />
+            <input 
+                placeholder="Street name: " 
+                name="streetName"
+                onChange={handleChange}
+                className="addNewModal__inputField"
+            />
+            <input 
+                placeholder="Street number: " 
+                type="number" 
+                name="number"
+                onChange={handleChange}
+                className="addNewModal__inputField"
+            />
+            <input 
+                placeholder="Latitude: " 
+                type="number" 
+                step="any"
+                name="latitude"
+                onChange={handleChange}
+                className="addNewModal__inputField"
+                value={isDefaultLocation ? props.defaultLatLng.lat : ''}
+            />
+            <input 
+                placeholder="Longitude: " 
+                type="number" 
+                step="any"
+                name="longitude"
+                onChange={handleChange}
+                className="addNewModal__inputField"
+                value={isDefaultLocation ? props.defaultLatLng.lng : ''}
+            />
+            <button type="submit" >Create</button>
+        </form>
     )
 
-    return isActive ? renderModal() : <></>
+    return (
+        <ModalBase
+            onClose={props.onClose}
+            modalTitle={"Add new Parking"}
+            isActive={props.isActive}
+        >
+            {renderModal()}
+        </ModalBase>
+    )
 }
 
 export default AddNewModal;

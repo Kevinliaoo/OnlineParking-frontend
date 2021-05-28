@@ -63,7 +63,13 @@ const MapPage: React.FC<IRoute> = props => {
         setLocation(latLng);
         setModalVisibility(true);
     }
-
+    
+    // User clicks a Parking to show Parking info modal 
+    const loadParkingData = (parking: IParkings) => {
+        setParkingInfo(parking)
+        setParkingVisibility(true);
+    }
+    
     // User closes Modal to add new Parking
     const closeAddNewModal = () => {
         setLocation({
@@ -73,10 +79,8 @@ const MapPage: React.FC<IRoute> = props => {
         setModalVisibility(false);
     }
 
-    // User clicks a Parking to show Parking info modal 
-    const loadParkingData = (parking: IParkings) => {
-        setParkingInfo(parking)
-        setParkingVisibility(true);
+    const closeProfile = () => {
+        setProfileVisibility(false);
     }
 
     // User closes parking modal 
@@ -114,7 +118,7 @@ const MapPage: React.FC<IRoute> = props => {
             />
             <ProfileModal 
                 isActive={profileVisible} 
-                onClose={setProfileVisibility} 
+                onClose={closeProfile} 
                 goBack={handleLogout}
             />
             <ParkingModal 

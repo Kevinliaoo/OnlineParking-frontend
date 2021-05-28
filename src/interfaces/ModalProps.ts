@@ -1,4 +1,9 @@
-export interface IModalProps {
-    isActive: boolean;
-    onClose: React.Dispatch<React.SetStateAction<boolean>>;
+export interface IModalProps extends IOtherModals {
+    children: React.ReactNode;
+    modalTitle: string;
+}
+
+export interface IOtherModals {
+    onClose: () => void; 
+    isActive: boolean; 
 }

@@ -1,10 +1,10 @@
 import React from 'react'; 
 import axios from 'axios';
 
-import { IModalProps } from '../../interfaces/ModalProps';
-
+import ModalBase from '../ModalBase/ModalBase';
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
+import { IOtherModals } from '../../interfaces/ModalProps';
 
 import './styles.css'
 
@@ -13,7 +13,7 @@ interface IUser {
     _id: string;
 }
 
-interface IProfileProps extends IModalProps {
+interface IProfileProps extends IOtherModals {
     goBack: () => void;
 }
 
@@ -39,22 +39,21 @@ const ProfileModal: React.FC<IProfileProps> = props => {
             })
     }, [])
 
-    const { isActive } = props;
-
     const renderModal = () => (
-        <div id="addNewModal" className="container-fluid">
-            <div className="row">
-                <div className="col-10 offset-1 col-md-6 offset-md-3" id="profileInfo">
-                    <div className="profileContianer">
-                        <p> @ {user.username}</p>
-                        <i className="fas fa-times fa-2x" onClick={() => props.onClose(false)}></i>
-                    </div>
-                </div>
-            </div>
+        <div className="profileContianer">
+            <p> @ {user.username}</p>
         </div>
     )
 
-    return isActive ? renderModal() : <></>
+    return (
+        <ModalBase
+            onClose={props.onClose}
+            modalTitle="Profile information"
+            isActive={props.isActive}
+        >
+            {renderModal()}
+        </ModalBase>
+    )
 }
 
 export default ProfileModal;
