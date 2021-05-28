@@ -2,8 +2,8 @@ import React from 'react';
 import axios from 'axios';
 
 import IRoute from '../../interfaces/RouteInterface';
-import IParkings from '../../interfaces/IParkings';
-import ILocation from '../../interfaces/ILocation';
+import Parking from '../../objects/Parking';
+import Location from '../../objects/Location';
 
 import Map from '../../components/Map/Map';
 import Menu from '../../components/Menu/Menu';
@@ -28,13 +28,13 @@ const MapPage: React.FC<IRoute> = props => {
     // Whether the API request to get Parkings was done
     const [ parkingsLoaded, loadParkings ] = React.useState<boolean>(false);
     // Parkings got by API request
-    const [ parkings, setParkigs ] = React.useState<IParkings[]>([]);
+    const [ parkings, setParkigs ] = React.useState<Parking[]>([]);
     // Location clicked on map to add a new Parking
-    const [ clickedLocation, setLocation ] = React.useState<ILocation>({
+    const [ clickedLocation, setLocation ] = React.useState<Location>({
         lat: -1, lng: -1
     })
     // Parking info for Parking info modal
-    const [ parkingInfo, setParkingInfo ] = React.useState<IParkings>({
+    const [ parkingInfo, setParkingInfo ] = React.useState<Parking>({
         // Empty id value for default 
         _id: '',
         location: {
@@ -59,13 +59,13 @@ const MapPage: React.FC<IRoute> = props => {
     }
 
     // When user clicks the map to add a new Parking
-    const handleOnClickMap = (latLng: ILocation) => {
+    const handleOnClickMap = (latLng: Location) => {
         setLocation(latLng);
         setModalVisibility(true);
     }
     
     // User clicks a Parking to show Parking info modal 
-    const loadParkingData = (parking: IParkings) => {
+    const loadParkingData = (parking: Parking) => {
         setParkingInfo(parking)
         setParkingVisibility(true);
     }
@@ -98,7 +98,7 @@ const MapPage: React.FC<IRoute> = props => {
         // Tengo que sacar la ciudad
         axios.get(parkings_url)
             .then(response => {
-                const res = response.data.map((p: IParkings) => p);
+                const res = response.data.map((p: Parking) => p);
                 setParkigs(res);
                 loadParkings(true);
             })

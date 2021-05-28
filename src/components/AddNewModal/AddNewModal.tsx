@@ -4,7 +4,7 @@ import axios from 'axios';
 import ModalBase from '../ModalBase/ModalBase';
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
-import ILocation from '../../interfaces/ILocation';
+import Location from '../../objects/Location';
 import { IOtherModals } from '../../interfaces/ModalProps';
 
 import './styles.css';
@@ -19,7 +19,7 @@ interface INewParking {
 }
 
 interface IAddNewProps extends IOtherModals {
-    defaultLatLng: ILocation; 
+    defaultLatLng: Location; 
 }
 
 const AddNewModal: React.FC<IAddNewProps> = props => {

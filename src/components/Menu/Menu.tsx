@@ -1,8 +1,10 @@
 import React from 'react'; 
 
-import { IMenuProps } from '../../interfaces/MenuProps';
-
 import './styles.css'
+
+interface IMenuProps {
+    menuOnClick: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 const Menu: React.FC<IMenuProps> = props => {
 

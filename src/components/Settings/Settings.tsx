@@ -1,10 +1,16 @@
 import React from 'react'; 
 
-import { ISettingsProps } from '../../interfaces/SettingsProps';
-
 import Line from '../Line/Line';
 
 import './styles.css'
+
+interface ISettingsProps {
+    visibility: boolean;
+    onClose: React.Dispatch<React.SetStateAction<boolean>>;
+    openModal: React.Dispatch<React.SetStateAction<boolean>>;
+    openProfile: React.Dispatch<React.SetStateAction<boolean>>;
+    handleLogout: () => void; 
+}
 
 const Settings: React.FC<ISettingsProps> = props => {
 

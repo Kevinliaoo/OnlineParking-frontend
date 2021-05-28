@@ -1,4 +1,4 @@
-interface IParkings {
+class Parking {
     _id: string;
     location: {
         lat: number, 
@@ -15,4 +15,4 @@ interface IParkings {
     user: string;
 }
 
-export default IParkings;
+export default Parking;

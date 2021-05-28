@@ -1,11 +1,11 @@
 import React from 'react'; 
 
 import ModalBase from '../ModalBase/ModalBase';
-import IParkings from '../../interfaces/IParkings';
+import Parking from '../../objects/Parking';
 import { IOtherModals } from '../../interfaces/ModalProps';
 
 interface IParkingModal extends IOtherModals {
-    parkingData: IParkings; 
+    parkingData: Parking; 
 }
 
 const ParkingModal: React.FC<IParkingModal> = props => {

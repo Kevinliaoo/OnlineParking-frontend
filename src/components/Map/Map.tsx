@@ -2,8 +2,8 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
 
-import IParkings from '../../interfaces/IParkings';
-import ILocation from '../../interfaces/ILocation';
+import Parking from '../../objects/Parking';
+import Location from '../../objects/Location';
 import config from '../../utils/config';
 
 const containerStyles = {
@@ -17,16 +17,16 @@ const defaultOptions = {
 }
 
 interface IMapProps {
-    parkings: IParkings[];
-    handleOnClickMap: (params: ILocation) => void;
-    loadParkingData: (data: IParkings) => void;
+    parkings: Parking[];
+    handleOnClickMap: (params: Location) => void;
+    loadParkingData: (data: Parking) => void;
 }
 
 const Map: React.FC<IMapProps> = props => {
 
-    const parkings: IParkings[] = props.parkings;
+    const parkings: Parking[] = props.parkings;
 
-    const [currentLocation, setLocation] = React.useState<ILocation>({
+    const [currentLocation, setLocation] = React.useState<Location>({
         lat: -1,
         lng: -1
     })
@@ -46,7 +46,7 @@ const Map: React.FC<IMapProps> = props => {
     }
 
     const handleMapClick = (event: google.maps.MapMouseEvent) => {
-        const clickedLocation: ILocation = {
+        const clickedLocation: Location = {
             lat: event.latLng.lat(), 
             lng: event.latLng.lng(),
         }
@@ -57,7 +57,7 @@ const Map: React.FC<IMapProps> = props => {
         const endpoint = `${config.API.URL}/parkings/${_id}`;
 
         try {
-            const response: IParkings = (await axios.get(endpoint)).data; 
+            const response: Parking = (await axios.get(endpoint)).data; 
             props.loadParkingData(response);
         } catch(e) {
             alert('Internal server error');
