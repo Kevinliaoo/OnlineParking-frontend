@@ -1,13 +1,23 @@
-#profileInfo {
-    height: 100px;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 2px 2px 30px;
+.userInfo {
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+    align-items: center;
+    justify-content: center;
 }
 
-.profileContianer {
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+.names {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+.names p {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.username {
+    margin: 10px;
+    display: flex;
+    justify-content: center;
 }

@@ -27,6 +27,10 @@ const MapPage: React.FC<IRoute> = props => {
     const [ parkingVisible, setParkingVisibility ] = React.useState<boolean>(false);
     // Whether the API request to get Parkings was done
     const [ parkingsLoaded, loadParkings ] = React.useState<boolean>(false);
+    // Get only available parkings
+    const [ onlyAvailable, setOnlyAv ] = React.useState<boolean>(false);
+    // To make re render after occupying a parking
+    const [ renderCounts, setRendercounts ] = React.useState<number>(0);
     // Parkings got by API request
     const [ parkings, setParkigs ] = React.useState<Parking[]>([]);
     // Location clicked on map to add a new Parking
@@ -79,8 +83,14 @@ const MapPage: React.FC<IRoute> = props => {
         setModalVisibility(false);
     }
 
+    // User closes Profile modal
     const closeProfile = () => {
         setProfileVisibility(false);
+    }
+
+    // User toggles Parkings availability
+    const toggleAvailability = () => {
+        setOnlyAv(!onlyAvailable);
     }
 
     // User closes parking modal 
@@ -91,9 +101,12 @@ const MapPage: React.FC<IRoute> = props => {
         })
         setParkingVisibility(false);
     }
+
+    // Re render map 
+    const reRenderMap = () => setRendercounts(renderCounts+1);
     
     React.useEffect(() => {
-        const parkings_url: string = `${config.API.URL}/parkings?city=Taoyuan&available=false`;
+        const parkings_url: string = `${config.API.URL}/parkings?available=${onlyAvailable ? 'true' : 'false'}`;
 
         // Tengo que sacar la ciudad
         axios.get(parkings_url)
@@ -106,11 +119,13 @@ const MapPage: React.FC<IRoute> = props => {
                 alert('Internal server error');
                 // Redireccionar a la pagina de login
             });
-    }, []);
+    }, [onlyAvailable, renderCounts]);
+
+    setInterval(() => setRendercounts(renderCounts+1), 2000);
 
     const renderPage = () => (
         <div id="mapPage">
-            <Menu menuOnClick={setSettingsVisibility} /> 
+            <Menu menuOnClick={setSettingsVisibility} availableOnClick={toggleAvailability} /> 
             <AddNewModal 
                 isActive={modalVisible} 
                 onClose={closeAddNewModal} 
@@ -125,6 +140,7 @@ const MapPage: React.FC<IRoute> = props => {
                 isActive={parkingVisible}
                 onClose={closeParkingModal}
                 parkingData={parkingInfo}
+                reRenderMap={reRenderMap}
             />
             <Settings 
                 visibility={settingsVisible} 

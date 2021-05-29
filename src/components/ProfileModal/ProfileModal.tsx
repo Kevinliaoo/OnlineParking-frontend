@@ -5,13 +5,9 @@ import ModalBase from '../ModalBase/ModalBase';
 import config from '../../utils/config';
 import LSFunctions from '../../utils/localStorage';
 import { IOtherModals } from '../../interfaces/ModalProps';
+import User from '../../objects/User';
 
 import './styles.css'
-
-interface IUser {
-    username: string; 
-    _id: string;
-}
 
 interface IProfileProps extends IOtherModals {
     goBack: () => void;
@@ -19,9 +15,11 @@ interface IProfileProps extends IOtherModals {
 
 const ProfileModal: React.FC<IProfileProps> = props => {
 
-    const [user, setUser] = React.useState<IUser>({
+    const [user, setUser] = React.useState<User>({
         username: '',
-        _id: ''
+        _id: '',
+        firstName: '', 
+        lastName: ''
     })
 
     React.useEffect(() => {
@@ -32,16 +30,28 @@ const ProfileModal: React.FC<IProfileProps> = props => {
 
         axios.get(url, configs)
             .then(response => {
-                setUser(response.data as IUser);
+                setUser(response.data as User);
             })
             .catch(e => {
+                alert('Internal server error');
                 props.goBack();
             })
     }, [])
 
     const renderModal = () => (
-        <div className="profileContianer">
-            <p> @ {user.username}</p>
+        <div className="container">
+            <div className="row">
+                <div className="col-12 userInfo">
+                    <i className="fas fa-user fa-4x"></i>
+                </div>
+                <div className="col-12 names">
+                    <p>{user.firstName}</p>
+                    <p>{user.lastName}</p>
+                    </div>
+                <div className="col-12 userInfo">
+                    <p>@{user.username}</p>
+                </div>
+            </div>
         </div>
     )
 

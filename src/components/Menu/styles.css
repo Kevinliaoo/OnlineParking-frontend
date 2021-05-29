@@ -1,6 +1,6 @@
 #menu {
     height: 50px; 
-    width: 400px;
+    width: 430px;
     margin: 10px;
     position: fixed;
     display: flex;
@@ -21,9 +21,16 @@
 }
 
 .fa-search {
-    margin-left: 20px;
+    margin: 10px;
 }
 
 .fa-bars:hover {
+    cursor: pointer;
+}
+
+.fa-check-circle {
+    margin-left: 5px;
+}
+.fa-check-circle:hover {
     cursor: pointer;
 }

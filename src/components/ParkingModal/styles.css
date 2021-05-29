@@ -1,0 +1,28 @@
+.streetName {
+    margin-top: 15px;
+    font-size: larger;
+}
+
+.occBtnContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.parkingData {
+    margin-top: 20px;
+}
+
+.occupyButton {
+    padding: 10px 25px;
+    border-radius: 10px;
+    background-color: greenyellow;
+    font-weight: bold;
+}
+
+.occupiedWarning {
+    font-size: larger;
+    color: red; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}

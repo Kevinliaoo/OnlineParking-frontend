@@ -3,7 +3,8 @@ import React from 'react';
 import './styles.css'
 
 interface IMenuProps {
-    menuOnClick: React.Dispatch<React.SetStateAction<boolean>>
+    menuOnClick: React.Dispatch<React.SetStateAction<boolean>>;
+    availableOnClick: () => void;
 }
 
 const Menu: React.FC<IMenuProps> = props => {
@@ -18,6 +19,9 @@ const Menu: React.FC<IMenuProps> = props => {
             </div>
             <div className="menu__searchBtn">
                 <i className="fas fa-search fa-lg"></i>
+            </div>
+            <div className="menu__AvailableBtn" onClick={props.availableOnClick}>
+                <i className="fas fa-check-circle fa-lg"></i>
             </div>
         </div> 
     )

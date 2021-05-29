@@ -5,12 +5,9 @@ import axios from 'axios';
 import LSFunctions from '../../utils/localStorage';
 import config from '../../utils/config';
 
-import './styles.css'
+import User from '../../objects/User';
 
-interface ILoginFields {
-    username: string, 
-    password: string
-}
+import './styles.css';
 
 interface IProps {
     onLogin: () => void;
@@ -19,7 +16,7 @@ interface IProps {
 const Loginform: React.FC<IProps> = props => {
     LSFunctions.deleteJwtToken();
 
-    const [ form, setValues ] = React.useState<ILoginFields>({
+    const [ form, setValues ] = React.useState<User>({
         username: '', 
         password: ''
     })
