@@ -4,6 +4,7 @@ import axios from 'axios';
 import IRoute from '../../interfaces/RouteInterface';
 import Parking from '../../objects/Parking';
 import Location from '../../objects/Location';
+import User from '../../objects/User';
 
 import Map from '../../components/Map/Map';
 import Menu from '../../components/Menu/Menu';
@@ -12,6 +13,7 @@ import AddNewModal from '../../components/AddNewModal/AddNewModal';
 import ProfileModal from '../../components/ProfileModal/ProfileModal';
 import ParkingModal from '../../components/ParkingModal/ParkingModal';
 import config from '../../utils/config';
+import LSFunctions from '../../utils/localStorage';
 
 import './styles.css';
 
@@ -55,6 +57,11 @@ const MapPage: React.FC<IRoute> = props => {
         user: '',
         city: ''
     })
+    // Logged user
+    const [ user, setUser ] = React.useState<User>({
+        _id: '',
+        username: ''
+    })
 
     // Logout function
     const handleLogout = () => {
@@ -80,6 +87,7 @@ const MapPage: React.FC<IRoute> = props => {
             lat: -1, 
             lng: -1
         });
+        setRendercounts(renderCounts+1);
         setModalVisibility(false);
     }
 
@@ -104,8 +112,29 @@ const MapPage: React.FC<IRoute> = props => {
 
     // Re render map 
     const reRenderMap = () => setRendercounts(renderCounts+1);
+
+    // Get logged user
+    const getUser = async () => {
+        try {
+            const endpoint = `${config.API.URL}/users/me`; 
+            const configs = {
+                headers: { Authorization: `Bearer ${LSFunctions.getJwtToken()}` }
+            };
+            const res: User = (await axios.get(endpoint, configs)).data;
+            setUser(res);
+        } catch(e) {
+            alert('Internal server error');
+        }
+    }
+
+    // Send Parking info to Parking modal
+    const goToParking = (parking: Parking) => {
+        setParkingInfo(parking);
+        setParkingVisibility(true);
+    }
     
     React.useEffect(() => {
+        getUser();
         const parkings_url: string = `${config.API.URL}/parkings?available=${onlyAvailable ? 'true' : 'false'}`;
 
         // Tengo que sacar la ciudad
@@ -121,8 +150,6 @@ const MapPage: React.FC<IRoute> = props => {
             });
     }, [onlyAvailable, renderCounts]);
 
-    setInterval(() => setRendercounts(renderCounts+1), 2000);
-
     const renderPage = () => (
         <div id="mapPage">
             <Menu menuOnClick={setSettingsVisibility} availableOnClick={toggleAvailability} /> 
@@ -135,12 +162,15 @@ const MapPage: React.FC<IRoute> = props => {
                 isActive={profileVisible} 
                 onClose={closeProfile} 
                 goBack={handleLogout}
+                user={user}
+                goToParking={goToParking}
             />
             <ParkingModal 
                 isActive={parkingVisible}
                 onClose={closeParkingModal}
                 parkingData={parkingInfo}
                 reRenderMap={reRenderMap}
+                user={user}
             />
             <Settings 
                 visibility={settingsVisible} 
@@ -161,7 +191,7 @@ const MapPage: React.FC<IRoute> = props => {
         <div>Loading page</div>
     )
 
-    return parkingsLoaded ? renderPage() : renderLoading()
+    return (parkingsLoaded && user._id !== '') ? renderPage() : renderLoading()
 }
 
 export default MapPage;

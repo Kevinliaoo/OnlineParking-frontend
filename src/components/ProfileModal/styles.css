@@ -21,3 +21,17 @@
     display: flex;
     justify-content: center;
 }
+
+.userParkingInfo {
+    margin-top: 20px;
+}
+
+.parkingAddress {
+    margin-left: 20px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+.parkingAddress:hover {
+    cursor: pointer;
+    color: lightseagreen;
+}

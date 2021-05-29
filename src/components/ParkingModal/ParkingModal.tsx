@@ -13,6 +13,7 @@ import './styles.css';
 interface IParkingModal extends IOtherModals {
     parkingData: Parking; 
     reRenderMap: () => void;
+    user: User;
 }
 
 const ParkingModal: React.FC<IParkingModal> = props => {
@@ -23,10 +24,6 @@ const ParkingModal: React.FC<IParkingModal> = props => {
 
     const { parkingData: parking } = props;
 
-    const [ userLoaded, loadUser ] = React.useState<boolean>(false);
-    const [ user, setUser ] = React.useState<User>({
-        username: '',
-    })
     const [ counts, setCounts ] = React.useState<number>(0);
 
     const occupyParking = () => {
@@ -46,26 +43,10 @@ const ParkingModal: React.FC<IParkingModal> = props => {
                     })
             })
             .catch(e => {
-                console.log(e);
                 alert('Internal server error'); 
                 props.onClose();
             })
     }
-
-    React.useEffect(() => {
-        const endpoint = `${config.API.URL}/users/me`; 
-
-        axios.get(endpoint, configs)
-            .then(response => {
-                const user: User = response.data;
-                loadUser(true);
-                setUser(user);
-            })
-            .catch(e => {
-                alert('Internal server error'); 
-                props.onClose();
-            })
-    }, [counts]);
 
     const renderModal = () => (
         <div className="container">
@@ -79,10 +60,10 @@ const ParkingModal: React.FC<IParkingModal> = props => {
                 </div>
                 <div className="col-12 occBtnContainer">
                     {
-                        user.occupied === parking._id ? (
+                        props.user.occupied === parking._id ? (
                             <button className="occupyButton" onClick={occupyParking}>Free up</button> 
                         ) : (
-                            user.occupied !== '' ? (
+                            props.user.occupied !== '' ? (
                                 <></>
                             ) : (
                                 parking.available ? (
@@ -98,7 +79,7 @@ const ParkingModal: React.FC<IParkingModal> = props => {
         </div>
     )
 
-    return userLoaded ? (
+    return (
         <ModalBase
             isActive={props.isActive}
             onClose={props.onClose}
@@ -106,9 +87,7 @@ const ParkingModal: React.FC<IParkingModal> = props => {
         >
             {renderModal()}
         </ModalBase>
-    ) : (
-        <div>Loading</div>
-    )
+    ) 
 }
 
 export default ParkingModal;
