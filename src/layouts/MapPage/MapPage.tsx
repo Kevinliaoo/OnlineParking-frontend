@@ -8,6 +8,7 @@ import User from '../../objects/User';
 
 import Map from '../../components/Map/Map';
 import Menu from '../../components/Menu/Menu';
+import Loading from '../../components/Loading/Loading';
 import Settings from '../../components/Settings/Settings';
 import AddNewModal from '../../components/AddNewModal/AddNewModal';
 import ProfileModal from '../../components/ProfileModal/ProfileModal';
@@ -31,6 +32,8 @@ const MapPage: React.FC<IRoute> = props => {
     const [ parkingsLoaded, loadParkings ] = React.useState<boolean>(false);
     // Get only available parkings
     const [ onlyAvailable, setOnlyAv ] = React.useState<boolean>(false);
+    // Map Component loaded
+    const [ mapLoaded, loadMap ] = React.useState<boolean>(false);
     // To make re render after occupying a parking
     const [ renderCounts, setRendercounts ] = React.useState<number>(0);
     // Parkings got by API request
@@ -67,6 +70,12 @@ const MapPage: React.FC<IRoute> = props => {
     const handleLogout = () => {
         const { history } = props as any;
         history.push('/login')
+    }
+
+    // Go to Home Page
+    const goHome = () => {
+        const { history } = props as any; 
+        history.push('/');
     }
 
     // When user clicks the map to add a new Parking
@@ -123,7 +132,7 @@ const MapPage: React.FC<IRoute> = props => {
             const res: User = (await axios.get(endpoint, configs)).data;
             setUser(res);
         } catch(e) {
-            alert('Internal server error');
+            handleLogout();
         }
     }
 
@@ -132,6 +141,8 @@ const MapPage: React.FC<IRoute> = props => {
         setParkingInfo(parking);
         setParkingVisibility(true);
     }
+
+    const onLoadMap = () => loadMap(true);
     
     React.useEffect(() => {
         getUser();
@@ -178,17 +189,19 @@ const MapPage: React.FC<IRoute> = props => {
                 openModal={setModalVisibility} 
                 openProfile={setProfileVisibility}
                 handleLogout={handleLogout}
+                goHome={goHome}
             />
             <Map 
                 parkings={parkings} 
                 handleOnClickMap={handleOnClickMap} 
                 loadParkingData={loadParkingData}
+                onLoadMap={onLoadMap}
             /> 
         </div>
     )
 
     const renderLoading = () => (
-        <div>Loading page</div>
+        <Loading />
     )
 
     return (parkingsLoaded && user._id !== '') ? renderPage() : renderLoading()

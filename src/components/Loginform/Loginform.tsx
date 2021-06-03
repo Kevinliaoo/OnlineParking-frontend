@@ -32,6 +32,7 @@ const Loginform: React.FC<IProps> = props => {
         event.preventDefault();
         const path: string = '/auth/login'; 
         const endpoint: string = `${config.API.URL}${path}`;
+        console.log(endpoint)
         
         axios.post(endpoint, form)
             .then((response) => {

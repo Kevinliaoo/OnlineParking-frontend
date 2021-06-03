@@ -18,6 +18,7 @@ const defaultOptions = {
 
 interface IMapProps {
     parkings: Parking[];
+    onLoadMap: () => void;
     handleOnClickMap: (params: Location) => void;
     loadParkingData: (data: Parking) => void;
 }
@@ -31,8 +32,6 @@ const Map: React.FC<IMapProps> = props => {
         lng: -1
     })
 
-    const [locationLoaded, loadLocation] = React.useState<boolean>(false);
-
     React.useEffect(() => {
         navigator.geolocation.getCurrentPosition(locationSuccess);
     }, []);
@@ -42,7 +41,7 @@ const Map: React.FC<IMapProps> = props => {
             lat: position.coords.latitude, 
             lng: position.coords.longitude,
         })
-        loadLocation(true);
+        props.onLoadMap()
     }
 
     const handleMapClick = (event: google.maps.MapMouseEvent) => {
@@ -95,11 +94,7 @@ const Map: React.FC<IMapProps> = props => {
         )
     }
 
-    const renderLoading = () => (
-        <div>Loading map</div>
-    )
-
-    return locationLoaded ? renderMap() : renderLoading()
+    return renderMap();
 }
 
 export default Map;

@@ -32,6 +32,9 @@
     color: black;
     margin-top: 10px;
 }
+#settings__title:hover {
+    cursor: pointer;
+}
 
 .settingsItem {
     display: flex;

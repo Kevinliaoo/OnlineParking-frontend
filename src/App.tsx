@@ -1,6 +1,8 @@
 import React from 'react'; 
 import { BrowserRouter, Switch, Route, RouteComponentProps } from 'react-router-dom';
 
+import Redirect from './layouts/Redirect/Redirect';
+
 import routes from './utils/routes';
 import './styles.css';
 
@@ -27,6 +29,7 @@ const App = () => {
               )
             })
           }
+          <Route component={Redirect} />
         </Switch>
       </BrowserRouter>
     </div>
